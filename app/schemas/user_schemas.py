@@ -10,7 +10,7 @@ import uuid
 
 class UserBase(BaseModel):
     username: str = Field(
-        ...,
+        ...,  
         min_length=3,
         max_length=50,
         description="The unique username of the user. Must be 3-50 characters long. Only letters, numbers, underscores, and hyphens are allowed.",
@@ -31,7 +31,7 @@ class UserBase(BaseModel):
         None,
         max_length=500,
         description="A short biography or description of the user.",
-        example="I am a software developer with more than 2 years of experience developing scalable web apps in Python.",
+        example="I am a software engineer with over 5 years of experience in building scalable web applications using Python and JavaScript.",
     )
     profile_picture_url: Optional[str] = Field(
         None,
@@ -39,6 +39,7 @@ class UserBase(BaseModel):
         example="https://example.com/profile_pictures/john_doe.jpg",
     )
 
+    
     @validator("username")
     def validate_username(cls, v):
         if not re.match(r"^[a-zA-Z0-9_-]+$", v):
@@ -58,7 +59,7 @@ class UserBase(BaseModel):
     @validator("profile_picture_url", pre=True, always=True)
     def validate_profile_picture_url(cls, v):
         if v is None:
-            return v  # If the URL is optional, allow None values
+            return v  
         parsed_url = urlparse(v)
         if not re.search(r"\.(jpg|jpeg|png)$", parsed_url.path):
             raise ValueError(
@@ -77,6 +78,7 @@ class UserBase(BaseModel):
                 "profile_picture_url": "https://example.com/profile_pictures/john_doe.jpg",
             },
         }
+
 
 
 class UserCreate(UserBase):
@@ -109,10 +111,11 @@ class UserCreate(UserBase):
                 "email": "john.doe@example.com",
                 "password": "SecurePassword123!",
                 "full_name": "John Doe",
-                "bio": "I am a data scientist passionate about machine learning and big data analytics.",
-                "profile_picture_url": "https://example.com/profile_pictures/jane_smith.jpg",
+                "bio": "I am a software engineer with over 5 years of experience in building scalable web applications using Python and JavaScript.",
+                "profile_picture_url": "https://example.com/profile_pictures/john_doe.jpg",
             },
         }
+
 
 
 class UserUpdate(BaseModel):
@@ -131,7 +134,7 @@ class UserUpdate(BaseModel):
         None,
         max_length=500,
         description="An updated biography or description of the user.",
-        example="I am software engineer specialized in backend development with Python.",
+        example="I am a senior software engineer specializing in backend development with Python and Node.js.",
     )
     profile_picture_url: Optional[HttpUrl] = Field(
         None,
@@ -144,8 +147,7 @@ class UserUpdate(BaseModel):
         if v is not None:
             parsed_url = urlparse(
                 str(v)
-            )  # Convert the URL object to a string before parsing
-            # Ensure the validation logic only runs when parsed_url is defined
+            )  
             if not re.search(r"\.(jpg|jpeg|png)$", parsed_url.path):
                 raise ValueError(
                     "Profile picture URL must point to a valid image file (JPEG, PNG)."
@@ -162,6 +164,7 @@ class UserUpdate(BaseModel):
                 "profile_picture_url": "https://example.com/profile_pictures/john_doe_updated.jpg",
             },
         }
+
 
 
 class UserResponse(UserBase):
@@ -206,7 +209,7 @@ class UserResponse(UserBase):
         ],
     )
 
-    # Custom validator to convert UUID to string
+    
     @validator("id", pre=True, allow_reuse=True)
     def convert_uuid_to_string(cls, value):
         if isinstance(value, uuid.UUID):
@@ -238,6 +241,7 @@ class UserResponse(UserBase):
                 ],
             },
         }
+
 
 
 class UserListResponse(BaseModel):
@@ -314,7 +318,7 @@ class UserListResponse(BaseModel):
         }
 
 
-# Define a model for user login requests
+
 class LoginRequest(BaseModel):
     username: str = Field(
         ..., description="Username of the user trying to login.", example="john_doe_123"
@@ -332,7 +336,7 @@ class LoginRequest(BaseModel):
         }
 
 
-# Define a model for error responses in case of issues
+
 class ErrorResponse(BaseModel):
     error: str = Field(
         ...,
