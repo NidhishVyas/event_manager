@@ -10,7 +10,7 @@ import uuid
 
 class UserBase(BaseModel):
     username: str = Field(
-        ...,  
+        ...,
         min_length=3,
         max_length=50,
         description="The unique username of the user. Must be 3-50 characters long. Only letters, numbers, underscores, and hyphens are allowed.",
@@ -39,7 +39,6 @@ class UserBase(BaseModel):
         example="https://example.com/profile_pictures/john_doe.jpg",
     )
 
-    
     @validator("username")
     def validate_username(cls, v):
         if not re.match(r"^[a-zA-Z0-9_-]+$", v):
@@ -59,7 +58,7 @@ class UserBase(BaseModel):
     @validator("profile_picture_url", pre=True, always=True)
     def validate_profile_picture_url(cls, v):
         if v is None:
-            return v  
+            return v
         parsed_url = urlparse(v)
         if not re.search(r"\.(jpg|jpeg|png)$", parsed_url.path):
             raise ValueError(
@@ -78,7 +77,6 @@ class UserBase(BaseModel):
                 "profile_picture_url": "https://example.com/profile_pictures/john_doe.jpg",
             },
         }
-
 
 
 class UserCreate(UserBase):
@@ -117,7 +115,6 @@ class UserCreate(UserBase):
         }
 
 
-
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = Field(
         None,
@@ -145,9 +142,7 @@ class UserUpdate(BaseModel):
     @validator("profile_picture_url", pre=True, always=True)
     def validate_profile_picture_url(cls, v):
         if v is not None:
-            parsed_url = urlparse(
-                str(v)
-            )  
+            parsed_url = urlparse(str(v))
             if not re.search(r"\.(jpg|jpeg|png)$", parsed_url.path):
                 raise ValueError(
                     "Profile picture URL must point to a valid image file (JPEG, PNG)."
@@ -164,7 +159,6 @@ class UserUpdate(BaseModel):
                 "profile_picture_url": "https://example.com/profile_pictures/john_doe_updated.jpg",
             },
         }
-
 
 
 class UserResponse(UserBase):
@@ -209,12 +203,15 @@ class UserResponse(UserBase):
         ],
     )
 
-    
     @validator("id", pre=True, allow_reuse=True)
     def convert_uuid_to_string(cls, value):
         if isinstance(value, uuid.UUID):
             return str(value)
         return value
+
+    @validator("email", pre=True)
+    def normalize_email(cls, v):
+        return v.strip().lower() if v else None
 
     class Config:
         json_schema_extra = {
@@ -241,7 +238,6 @@ class UserResponse(UserBase):
                 ],
             },
         }
-
 
 
 class UserListResponse(BaseModel):
@@ -318,7 +314,6 @@ class UserListResponse(BaseModel):
         }
 
 
-
 class LoginRequest(BaseModel):
     username: str = Field(
         ..., description="Username of the user trying to login.", example="john_doe_123"
@@ -334,7 +329,6 @@ class LoginRequest(BaseModel):
             "description": "Model for user login request.",
             "example": {"username": "john_doe_123", "password": "SecurePassword123!"},
         }
-
 
 
 class ErrorResponse(BaseModel):
