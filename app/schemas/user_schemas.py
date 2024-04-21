@@ -149,6 +149,10 @@ class UserUpdate(BaseModel):
                 )
         return v
 
+    @validator("username", pre=True)
+    def normalize_username(cls, v):
+        return v.lower() if v else None
+
     class Config:
         json_schema_extra = {
             "description": "Model for updating user information.",
