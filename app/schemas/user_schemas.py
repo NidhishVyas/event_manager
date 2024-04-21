@@ -41,6 +41,8 @@ class UserBase(BaseModel):
 
     @validator("username")
     def validate_username(cls, v):
+        if len(v) < 5:
+            raise ValueError("Username must be more than 5 characters long.")
         if not re.match(r"^[a-zA-Z0-9_-]+$", v):
             raise ValueError(
                 "Username can only contain letters, numbers, underscores, and hyphens."
@@ -65,6 +67,20 @@ class UserBase(BaseModel):
                 "Profile picture URL must point to a valid image file (JPEG, PNG)."
             )
         return v
+
+    @validator("profile_picture_url", pre=True, always=True)
+    def validate_profile_picture_url(cls, v):
+        if v is not None:
+            parsed_url = urlparse(str(v))
+            if not re.search(r"\.(jpg|jpeg|png)$", parsed_url.path):
+                raise ValueError(
+                    "Profile picture URL must point to a valid image file (JPEG, PNG)."
+                )
+        return v
+
+    @validator("username", pre=True)
+    def normalize_username(cls, v):
+        return v.lower() if v else None
 
     class Config:
         json_schema_extra = {
@@ -138,20 +154,6 @@ class UserUpdate(BaseModel):
         description="An updated URL to the user's profile picture.",
         example="https://example.com/profile_pictures/john_doe_updated.jpg",
     )
-
-    @validator("profile_picture_url", pre=True, always=True)
-    def validate_profile_picture_url(cls, v):
-        if v is not None:
-            parsed_url = urlparse(str(v))
-            if not re.search(r"\.(jpg|jpeg|png)$", parsed_url.path):
-                raise ValueError(
-                    "Profile picture URL must point to a valid image file (JPEG, PNG)."
-                )
-        return v
-
-    @validator("username", pre=True)
-    def normalize_username(cls, v):
-        return v.lower() if v else None
 
     class Config:
         json_schema_extra = {
