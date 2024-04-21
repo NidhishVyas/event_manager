@@ -22,13 +22,13 @@ The PostgreSQL database is created and can be accessed through PGAdmin.
 
 ## Issues Link
 
-- [Issue 1](https://github.com/NidhishVyas/event_manager/pull/1)
-- [Issue 2](https://github.com/NidhishVyas/event_manager/pull/2)
-- [Issue 3](https://github.com/NidhishVyas/event_manager/pull/3)
-- [Issue 4](https://github.com/NidhishVyas/event_manager/pull/4)
-- [Issue 5](https://github.com/NidhishVyas/event_manager/pull/5)
-- [Issue 6](https://github.com/NidhishVyas/event_manager/pull/6)
-- [Issue 7](https://github.com/NidhishVyas/event_manager/pull/7)
+- [Issue 1](https://github.com/NidhishVyas/event_manager/pull/1): Solved the issue of data mismatch when logging in
+- [Issue 2](https://github.com/NidhishVyas/event_manager/pull/2): Updated user schemas with improved bio and profile picture
+- [Issue 3](https://github.com/NidhishVyas/event_manager/pull/3): Updated status code in create user route to 200 OK
+- [Issue 4](https://github.com/NidhishVyas/event_manager/pull/4): Validation check on email
+- [Issue 5](https://github.com/NidhishVyas/event_manager/pull/5): Implemented password hashing and verification
+- [Issue 6](https://github.com/NidhishVyas/event_manager/pull/6): Normalize username so that there is consistent usernames
+- [Issue 7](https://github.com/NidhishVyas/event_manager/pull/7): Validation for username length to be more than 5 characters
 
 ## Docker Configuration
 
